@@ -18,7 +18,6 @@ import (
 	"time"
 
 	"github.com/2637309949/bulrush"
-	"github.com/2637309949/bulrush/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -101,7 +100,7 @@ func (logger *LoggerWriter) Plugin() bulrush.PNRet {
 	return func(cfg *bulrush.Config, router *gin.RouterGroup) {
 		logger.cfg = cfg
 		router.Use(func(c *gin.Context) {
-			logsDir := utils.Some(utils.LeftV(cfg.String("logs")), "logs").(string)
+			logsDir := bulrush.Some(bulrush.LeftV(cfg.String("logs")), "logs").(string)
 			logsDir = path.Join(".", logsDir)
 			logPath := getLogFile(SYSLEVEL, logsDir)
 			writer := createLog(logPath)
@@ -126,7 +125,7 @@ func (logger *LoggerWriter) Plugin() bulrush.PNRet {
 // fileName start with "1"
 // User level
 func (logger *LoggerWriter) Writer(info string) {
-	logsDir := utils.Some(utils.LeftV(logger.cfg.String("logs")), "logs").(string)
+	logsDir := bulrush.Some(bulrush.LeftV(logger.cfg.String("logs")), "logs").(string)
 	logsDir = path.Join(".", logsDir)
 	logPath := getLogFile(USERLEVEL, logsDir)
 	writer := createLog(logPath)
