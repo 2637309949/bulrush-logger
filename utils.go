@@ -33,7 +33,7 @@ func LeftV(left interface{}, right interface{}) interface{} {
 
 // createLog -
 func createLog(path string) io.Writer {
-	f, _ := os.OpenFile(path, os.O_APPEND|os.O_CREATE, 0600)
+	f, _ := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0600)
 	writer := io.MultiWriter(f, os.Stdout)
 	return writer
 }
