@@ -39,11 +39,11 @@ func (logger *Logger) Plugin() bulrush.PNRet {
 			}
 			clientIP := c.ClientIP()
 			method := c.Request.Method
-			journal.Info("[%v] => %s %6s %s\n", start.Format("2006/01/02 15:04:05"), clientIP, method, path)
+			journal.Info("[%v] => %s %6s %s", start.Format("2006/01/02 15:04:05"), clientIP, method, path)
 			c.Next()
 			end := time.Now()
 			latency := float64(end.Sub(start) / time.Millisecond)
-			journal.Info("[%v] <= %.2fms %s %6s %s\n", end.Format("2006/01/02 15:04:05"), latency, clientIP, method, path)
+			journal.Info("[%v] <= %.2fms %s %6s %s", end.Format("2006/01/02 15:04:05"), latency, clientIP, method, path)
 		})
 	}
 }
