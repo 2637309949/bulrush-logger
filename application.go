@@ -47,7 +47,7 @@ func defaultFormat(p *Payload, ctx *gin.Context) string {
 		latency := float64(time.Unix(p.EndUnix, 0).Sub(time.Unix(p.StartUnix, 0)) / time.Millisecond)
 		return fmt.Sprintf("[%v] <= %.2fms %s %6s %s", endOfTime, latency, p.IP, p.Method, p.URL)
 	}
-	return "FROMAT ERROR"
+	return "NO FORMAT"
 }
 
 // Plugin for Recovery
