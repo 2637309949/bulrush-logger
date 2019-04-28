@@ -19,11 +19,13 @@ import (
 )
 
 type (
+	// Type logger type
+	Type int
 	// Payload in request
 	Payload struct {
 		StartUnix int64
 		EndUnix   int64
-		Type      string
+		Type      Type
 		Latency   float64
 		Method    string
 		IP        string
@@ -38,11 +40,18 @@ type (
 	}
 )
 
+const (
+	// INT logger type
+	INT Type = iota + 1
+	// OUT logger type
+	OUT
+)
+
 func defaultFormat(p *Payload, ctx *gin.Context) string {
-	if p.Type == "IN" {
+	if p.Type == INT {
 		startTime := time.Unix(p.StartUnix, 0).Format("2006/01/02 15:04:05")
 		return fmt.Sprintf("[%v] => %s %6s %s", startTime, p.IP, p.Method, p.URL)
-	} else if p.Type == "OUT" {
+	} else if p.Type == OUT {
 		endOfTime := time.Unix(p.EndUnix, 0).Format("2006/01/02 15:04:05")
 		latency := float64(time.Unix(p.EndUnix, 0).Sub(time.Unix(p.StartUnix, 0)) / time.Millisecond)
 		return fmt.Sprintf("[%v] <= %.2fms %s %6s %s", endOfTime, latency, p.IP, p.Method, p.URL)
@@ -65,7 +74,7 @@ func (logger *Logger) Plugin() bulrush.PNRet {
 			if raw != "" {
 				path = path + "?" + raw
 			}
-			payload.Type = "IN"
+			payload.Type = INT
 			payload.StartUnix = time.Now().Unix()
 			payload.IP = c.ClientIP()
 			payload.Method = c.Request.Method
@@ -73,7 +82,7 @@ func (logger *Logger) Plugin() bulrush.PNRet {
 			in := logger.Format(payload, c)
 			journal.Info("%s", in)
 			c.Next()
-			payload.Type = "OUT"
+			payload.Type = OUT
 			payload.EndUnix = time.Now().Unix()
 			out := logger.Format(payload, c)
 			journal.Info("%s", out)
