@@ -21,15 +21,15 @@ type (
 	// Logger plugin
 	Logger struct {
 		bulrush.PNBase
-		cfg *bulrush.Config
+		Path string
 	}
 )
 
 // Plugin for Recovery
 func (logger *Logger) Plugin() bulrush.PNRet {
 	return func(cfg *bulrush.Config, router *gin.RouterGroup) {
-		logger.cfg = cfg
-		journal := journal.CreateHTTPLogger(path.Join(".", Some(LeftV(cfg.String("logs")), "logs").(string)))
+		logger.Path = Some(logger.Path, LeftV(cfg.String("logs"))).(string)
+		journal := journal.CreateHTTPLogger(path.Join(".", Some(logger.Path, "logs").(string)))
 		router.Use(func(c *gin.Context) {
 			start := time.Now()
 			path := c.Request.URL.Path
