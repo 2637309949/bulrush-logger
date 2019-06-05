@@ -47,6 +47,23 @@ const (
 	OUT
 )
 
+func createLogger(path string) *journal.Journal {
+	journal := journal.CreateLogger(
+		journal.HTTPLevel,
+		nil,
+		[]*journal.Transport{
+			&journal.Transport{
+				Dirname: path,
+				Level:   journal.HTTPLevel,
+				Maxsize: journal.Maxsize,
+			},
+			&journal.Transport{
+				Level: journal.HTTPLevel,
+			},
+		},
+	)
+	return journal
+}
 func defaultFormat(p *Payload, ctx *gin.Context) string {
 	if p.Type == INT {
 		startTime := time.Unix(p.StartUnix, 0).Format("2006/01/02 15:04:05")
@@ -63,7 +80,7 @@ func defaultFormat(p *Payload, ctx *gin.Context) string {
 func (logger *Logger) Plugin() bulrush.PNRet {
 	return func(cfg *bulrush.Config, router *gin.RouterGroup) {
 		logger.Path = Some(logger.Path, cfg.Log.Path).(string)
-		journal := journal.CreateHTTPLogger(path.Join(".", Some(logger.Path, "logs").(string)))
+		journal := createLogger(path.Join(Some(logger.Path, "logs").(string), "http"))
 		payload := &Payload{}
 		if logger.Format == nil {
 			logger.Format = defaultFormat
@@ -80,12 +97,12 @@ func (logger *Logger) Plugin() bulrush.PNRet {
 			payload.Method = c.Request.Method
 			payload.URL = path
 			in := logger.Format(payload, c)
-			journal.Info("%s", in)
+			journal.HTTP("%s", in)
 			c.Next()
 			payload.Type = OUT
 			payload.EndUnix = time.Now().Unix()
 			out := logger.Format(payload, c)
-			journal.Info("%s", out)
+			journal.HTTP("%s", out)
 		})
 	}
 }
