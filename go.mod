@@ -1,4 +1,4 @@
-module github.com/2637309949/bulrush
+module github.com/2637309949/bulrush-logger
 
 go 1.12
 
