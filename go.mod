@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/2637309949/bulrush-addition v0.0.0-20190605141653-01e70cd1cb76
-	github.com/beego/bee v1.10.0 // indirect
+	
 	github.com/gin-gonic/gin v1.4.0
 	github.com/thoas/go-funk v0.4.0 // indirect
 )
