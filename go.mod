@@ -3,10 +3,11 @@ module github.com/2637309949/bulrush-logger
 go 1.12
 
 require (
-	github.com/2637309949/bulrush-addition v0.0.0-20190605141653-01e70cd1cb76
-	
+	github.com/2637309949/bulrush v0.0.0-20190611151459-bf0d063f6f83
+	github.com/2637309949/bulrush-addition v0.0.0-20190608111855-725ea7bbda0e
+	github.com/beego/bee v1.10.0 // indirect
+
 	github.com/gin-gonic/gin v1.4.0
-	github.com/thoas/go-funk v0.4.0 // indirect
 )
 
 replace golang.org/x/text v0.3.0 => github.com/golang/text v0.3.0
