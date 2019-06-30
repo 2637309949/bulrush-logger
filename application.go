@@ -45,16 +45,16 @@ const (
 
 func createLogger(path string) *journal.Journal {
 	journal := journal.CreateLogger(
-		journal.HTTPLevel,
+		journal.HTTP,
 		nil,
 		[]*journal.Transport{
 			&journal.Transport{
 				Dirname: path,
-				Level:   journal.HTTPLevel,
+				Level:   journal.HTTP,
 				Maxsize: journal.Maxsize,
 			},
 			&journal.Transport{
-				Level: journal.HTTPLevel,
+				Level: journal.HTTP,
 			},
 		},
 	)
