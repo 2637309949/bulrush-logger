@@ -74,7 +74,7 @@ func defaultFormat(p *Payload, ctx *gin.Context) string {
 }
 
 // Plugin for Recovery
-func (logger *Logger) Plugin() bulrush.PNRet {
+func (logger *Logger) Plugin() interface{} {
 	return func(cfg *bulrush.Config, router *gin.RouterGroup) {
 		logger.Path = Some(logger.Path, cfg.Log.Path).(string)
 		journal := createLogger(path.Join(Some(logger.Path, "logs").(string), "http"))
