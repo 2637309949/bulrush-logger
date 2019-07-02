@@ -30,7 +30,6 @@ type (
 
 	// Logger plugin
 	Logger struct {
-		bulrush.PNBase
 		Format func(*Payload, *gin.Context) string
 		Path   string
 	}
@@ -74,32 +73,30 @@ func defaultFormat(p *Payload, ctx *gin.Context) string {
 }
 
 // Plugin for Recovery
-func (logger *Logger) Plugin() interface{} {
-	return func(cfg *bulrush.Config, router *gin.RouterGroup) {
-		logger.Path = Some(logger.Path, cfg.Log.Path).(string)
-		journal := createLogger(path.Join(Some(logger.Path, "logs").(string), "http"))
-		payload := &Payload{}
-		if logger.Format == nil {
-			logger.Format = defaultFormat
-		}
-		router.Use(func(c *gin.Context) {
-			path := c.Request.URL.Path
-			raw := c.Request.URL.RawQuery
-			if raw != "" {
-				path = path + "?" + raw
-			}
-			payload.Type = INT
-			payload.StartUnix = time.Now().Unix()
-			payload.IP = c.ClientIP()
-			payload.Method = c.Request.Method
-			payload.URL = path
-			in := logger.Format(payload, c)
-			journal.HTTP("%s", in)
-			c.Next()
-			payload.Type = OUT
-			payload.EndUnix = time.Now().Unix()
-			out := logger.Format(payload, c)
-			journal.HTTP("%s", out)
-		})
+func (logger *Logger) Plugin(cfg *bulrush.Config, router *gin.RouterGroup) {
+	logger.Path = Some(logger.Path, cfg.Log.Path).(string)
+	journal := createLogger(path.Join(Some(logger.Path, "logs").(string), "http"))
+	payload := &Payload{}
+	if logger.Format == nil {
+		logger.Format = defaultFormat
 	}
+	router.Use(func(c *gin.Context) {
+		path := c.Request.URL.Path
+		raw := c.Request.URL.RawQuery
+		if raw != "" {
+			path = path + "?" + raw
+		}
+		payload.Type = INT
+		payload.StartUnix = time.Now().Unix()
+		payload.IP = c.ClientIP()
+		payload.Method = c.Request.Method
+		payload.URL = path
+		in := logger.Format(payload, c)
+		journal.HTTP("%s", in)
+		c.Next()
+		payload.Type = OUT
+		payload.EndUnix = time.Now().Unix()
+		out := logger.Format(payload, c)
+		journal.HTTP("%s", out)
+	})
 }
