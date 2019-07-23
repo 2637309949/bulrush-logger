@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/2637309949/bulrush"
+	addition "github.com/2637309949/bulrush-addition"
 	journal "github.com/2637309949/bulrush-addition/logger"
 	"github.com/gin-gonic/gin"
 )
@@ -43,21 +44,14 @@ const (
 )
 
 func createLogger(path string) *journal.Journal {
-	journal := journal.CreateLogger(
-		journal.HTTP,
-		nil,
-		[]*journal.Transport{
+	return addition.RushLogger.
+		AppendTransports(
 			&journal.Transport{
 				Dirname: path,
 				Level:   journal.HTTP,
 				Maxsize: journal.Maxsize,
 			},
-			&journal.Transport{
-				Level: journal.HTTP,
-			},
-		},
-	)
-	return journal
+		)
 }
 
 func defaultFormat(p *Payload, ctx *gin.Context) string {
