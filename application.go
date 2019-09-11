@@ -45,7 +45,7 @@ const (
 
 func createLogger(path string) *journal.Journal {
 	return addition.RushLogger.
-		AppendTransports(
+		AddTransports(
 			&journal.Transport{
 				Dirname: path,
 				Level:   journal.HTTP,
