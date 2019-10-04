@@ -46,11 +46,11 @@ const (
 func createLogger(path string) *journal.Journal {
 	return addition.RushLogger.
 		AddTransports(
-			&journal.Transport{
+			journal.NewFileTransport(journal.Transport{
 				Dirname: path,
 				Level:   journal.HTTP,
 				Maxsize: journal.Maxsize,
-			},
+			}),
 		)
 }
 

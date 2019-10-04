@@ -33,6 +33,7 @@ github.com/2637309949/bulrush-mq v0.0.0-20190814163826-12f2e8e8b979/go.mod h1:/j
 github.com/2637309949/bulrush-openapi v0.0.0-20190805060026-c5958cb2f053/go.mod h1:lFYX57cTOhUnuDumiUOWtm8q/wQgj0j1VAOSkXkAsU0=
 github.com/2637309949/bulrush-proxy v0.0.0-20190805060003-15134ca1ade4/go.mod h1:nAt1/GSLxvBXVtGKJqSWAPzpfI3vxRH8F7c6aIwlPCg=
 github.com/2637309949/bulrush-role v0.0.0-20190815073833-05a8fe434808/go.mod h1:rHMKrZ5JR2D9OKAoPbPcCZuOPkqTlVIdFh0D9+0Jghg=
+github.com/2637309949/bulrush-template v0.0.0-20190831034000-f9696cde578d h1:U118QTxAqVHDc1ik3et57GDEJvrV2hLKuT39DYPdXzE=
 github.com/2637309949/bulrush-template v0.0.0-20190831034000-f9696cde578d/go.mod h1:0LDDlVW0yVOR2LZGh+Cl+zsDFomR9dkcI9DNDRvRdt4=
 github.com/2637309949/bulrush-upload v0.0.0-20190805060057-d3f855287492/go.mod h1:iOqQgtpLlqsv9+SY2EqlEMUPpnvpqr4OUilIYGHp298=
 github.com/2637309949/bulrush-utils v0.0.0-20190713031957-0a43e2c4a4e6/go.mod h1:vPokdMdNi8X8e59c24pngRNoMR3eiYpCd/3V/Rqj/E0=
