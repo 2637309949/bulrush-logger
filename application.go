@@ -6,12 +6,9 @@ package logger
 
 import (
 	"fmt"
-	"path"
 	"time"
 
 	"github.com/2637309949/bulrush"
-	addition "github.com/2637309949/bulrush-addition"
-	journal "github.com/2637309949/bulrush-addition/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -43,17 +40,6 @@ const (
 	OUT
 )
 
-func createLogger(path string) *journal.Journal {
-	return addition.RushLogger.
-		AddTransports(
-			journal.NewFileTransport(journal.Transport{
-				Dirname: path,
-				Level:   journal.HTTP,
-				Maxsize: journal.Maxsize,
-			}),
-		)
-}
-
 func defaultFormat(p *Payload, ctx *gin.Context) string {
 	if p.Type == INT {
 		startTime := time.Unix(p.StartUnix, 0).Format("2006/01/02 15:04:05")
@@ -69,7 +55,6 @@ func defaultFormat(p *Payload, ctx *gin.Context) string {
 // Plugin for Recovery
 func (logger *Logger) Plugin(cfg *bulrush.Config, router *gin.RouterGroup) {
 	logger.Path = Some(logger.Path, cfg.Log.Path).(string)
-	journal := createLogger(path.Join(Some(logger.Path, "logs").(string), "http"))
 	payload := &Payload{}
 	if logger.Format == nil {
 		logger.Format = defaultFormat
@@ -86,11 +71,11 @@ func (logger *Logger) Plugin(cfg *bulrush.Config, router *gin.RouterGroup) {
 		payload.Method = c.Request.Method
 		payload.URL = path
 		in := logger.Format(payload, c)
-		journal.HTTP("%s", in)
+		rushLogger.Info("%s", in)
 		c.Next()
 		payload.Type = OUT
 		payload.EndUnix = time.Now().Unix()
 		out := logger.Format(payload, c)
-		journal.HTTP("%s", out)
+		rushLogger.Info("%s", out)
 	})
 }
